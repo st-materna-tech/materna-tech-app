@@ -107,7 +107,7 @@ def render_page():
     st.header("Bi-Variate Charts")
     
     # Define the plots
-    plots = [text_plot1, text_plot3, text_plot4, text_plot5, text_plot6]
+    plots = [text_plot1, text_plot3, text_plot4, text_plot5]
 
     # Create a grid of columns with 2 columns in each row
     num_plots = len(plots)
