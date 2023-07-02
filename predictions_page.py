@@ -4,7 +4,8 @@ from PIL import Image
 import pandas as pd
 import numpy as np
 
-    
+toPredictDF = pd.read_csv('./final3.csv')
+
 def predict_sentiment(text): #, model_type):
 
     # Load the trained model from the local file system
@@ -27,27 +28,26 @@ def predict_sentiment(text): #, model_type):
         # X_test = vectorizer.transform(text.split())
         # proba = model.predict_proba(X_test)[0]
     # else:
-    toPredictDF = pd.read_csv('./final3.csv')
-    # toPredictDF = data.drop(columns=['BIRTHDATE', 'DEATHDATE', 'HEALTHCARE_EXPENSES'])
-    if text in toPredictDF['NEW_PATIENT_ID'].values:
-        data_to_predict = toPredictDF[toPredictDF['NEW_PATIENT_ID'] == text].drop(['PATIENT_ID', 'NEW_PATIENT_ID', 'DESCRIPTION'], axis=1)
-        st.write(f'Extracted Patient details for patient ID {text}:')
-        st.dataframe(data_to_predict.head(1))
-        proba = model.predict_proba([data_to_predict.iloc[0]]) #data_to_predict .sample(1))[0]
-        cats = ['Fetus with unknown complication',
-                'Miscarriage in first trimester',
-                'Normal pregnancy',
-                'Preeclampsia',
-                'Tubal pregnancy']
     
-        pred_df = pd.DataFrame({'Categories': cats, 'Probability': proba[0]})
+    # toPredictDF = data.drop(columns=['BIRTHDATE', 'DEATHDATE', 'HEALTHCARE_EXPENSES'])
+    
+    data_to_predict = toPredictDF[toPredictDF['NEW_PATIENT_ID'] == text].drop(['PATIENT_ID', 'NEW_PATIENT_ID', 'DESCRIPTION'], axis=1)
+    st.write(f'Extracted Patient details for patient ID {text}:')
+    st.dataframe(data_to_predict.head(1))
+    proba = model.predict_proba([data_to_predict.iloc[0]]) #data_to_predict .sample(1))[0]
+    cats = ['Fetus with unknown complication',
+            'Miscarriage in first trimester',
+            'Normal pregnancy',
+            'Preeclampsia',
+            'Tubal pregnancy']
+
+    pred_df = pd.DataFrame({'Categories': cats, 'Probability': proba[0]})
+    
+    prediction = cats[np.argmax(proba)]
+    print(prediction, np.argmax(proba))
+    sentiment = "Positive" if prediction == 'Normal pregnancy' else 'Negative' if prediction == 'Miscarriage in first trimester' else "Neutral"
+    return pred_df, sentiment, prediction
         
-        prediction = cats[np.argmax(proba)]
-        print(prediction, np.argmax(proba))
-        sentiment = "Positive" if prediction == 'Normal pregnancy' else 'Negative' if prediction == 'Miscarriage in first trimester' else "Neutral"
-        return pred_df, sentiment, prediction
-    else:
-        st.write('Provided patiend ID is invalid/unavailable in the database')
     
 
 def render_page():
@@ -76,20 +76,23 @@ def render_page():
     st.text("")
     #model_type = st.selectbox('Select a Model', ['Random Forest', 'Decision Tree', 'Logistic Regression', 'Bagging', 'SVM'])
     if st.button('Predict'):
-        if user_text:
-            pred_df, sentiment, prediction = predict_sentiment(user_text) #, model_type)
-            
-            st.write('## Result')
-            #st.write('---')               
-            col1, col2  = st.columns([1, 1]) #, 1])
-            with col1:
-                print(pred_df)
-                st.dataframe(pred_df)
-            with col2:
-                st.write('Model Prediction:')
-                if prediction == 'Normal pregnancy':
-                    st.success(prediction)
-                elif prediction == 'Miscarriage in first trimester':
-                    st.error(prediction)
-                else:
-                    st.warning(prediction)
+        if text in toPredictDF['NEW_PATIENT_ID'].values:
+            if user_text:
+                pred_df, sentiment, prediction = predict_sentiment(user_text) #, model_type)
+                
+                st.write('## Result')
+                #st.write('---')               
+                col1, col2  = st.columns([1, 1]) #, 1])
+                with col1:
+                    print(pred_df)
+                    st.dataframe(pred_df)
+                with col2:
+                    st.write('Model Prediction:')
+                    if prediction == 'Normal pregnancy':
+                        st.success(prediction)
+                    elif prediction == 'Miscarriage in first trimester':
+                        st.error(prediction)
+                    else:
+                        st.warning(prediction)
+        else:
+            st.error('Provided patiend ID is invalid/unavailable in the database')
