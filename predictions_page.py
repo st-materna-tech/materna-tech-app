@@ -29,22 +29,26 @@ def predict_sentiment(text): #, model_type):
     # else:
     toPredictDF = pd.read_csv('./final3.csv')
     # toPredictDF = data.drop(columns=['BIRTHDATE', 'DEATHDATE', 'HEALTHCARE_EXPENSES'])
-    data_to_predict = toPredictDF[toPredictDF['NEW_PATIENT_ID'] == text].drop(['PATIENT_ID', 'NEW_PATIENT_ID', 'DESCRIPTION'], axis=1)
-    st.write(f'Extracted Patient details for patient ID {text}:')
-    st.table(data_to_predict.head(1))
-    proba = model.predict_proba([data_to_predict.iloc[0]]) #data_to_predict .sample(1))[0]
-    cats = ['Fetus with unknown complication',
-            'Miscarriage in first trimester',
-            'Normal pregnancy',
-            'Preeclampsia',
-            'Tubal pregnancy']
-
-    pred_df = pd.DataFrame({'Categories': cats, 'Probability': proba[0]})
+    if text in toPredictDF['NEW_PATIENT_ID'].values:
+        data_to_predict = toPredictDF[toPredictDF['NEW_PATIENT_ID'] == text].drop(['PATIENT_ID', 'NEW_PATIENT_ID', 'DESCRIPTION'], axis=1)
+        st.write(f'Extracted Patient details for patient ID {text}:')
+        st.dataframe(data_to_predict.head(1))
+        proba = model.predict_proba([data_to_predict.iloc[0]]) #data_to_predict .sample(1))[0]
+        cats = ['Fetus with unknown complication',
+                'Miscarriage in first trimester',
+                'Normal pregnancy',
+                'Preeclampsia',
+                'Tubal pregnancy']
     
-    prediction = cats[np.argmax(proba)]
-    print(prediction, np.argmax(proba))
-    sentiment = "Positive" if prediction == 'Normal pregnancy' else 'Negative' if prediction == 'Miscarriage in first trimester' else "Neutral" 
-    return pred_df, sentiment, prediction
+        pred_df = pd.DataFrame({'Categories': cats, 'Probability': proba[0]})
+        
+        prediction = cats[np.argmax(proba)]
+        print(prediction, np.argmax(proba))
+        sentiment = "Positive" if prediction == 'Normal pregnancy' else 'Negative' if prediction == 'Miscarriage in first trimester' else "Neutral"
+        return pred_df, sentiment, prediction
+    else:
+        st.write('Provided patiend ID is invalid/unavailable in the database')
+    
 
 def render_page():
     st.title("MATERNATECH")
