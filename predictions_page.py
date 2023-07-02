@@ -67,7 +67,7 @@ def render_page():
                     # 'f9b8f463-595a-49c5-8c5a-18ec493301fb']
                     
     sample_ids = ['MTID 9773', 'MTID 1155', 'MTID 7210', 'MTID 2393', 'MTID 5585', 'MTID 1412']
-    user_text = st.selectbox('Select a Patiend ID from the list or enter any known Patient IDs', ['Enter Patient ID'] + sample_ids)
+    user_text = st.selectbox('Select a Patient ID from the list or enter any known Patient IDs', ['Enter Patient ID'] + sample_ids)
     
     # Add text input
     if user_text == 'Enter Patient ID':
