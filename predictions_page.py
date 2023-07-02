@@ -76,7 +76,7 @@ def render_page():
     st.text("")
     #model_type = st.selectbox('Select a Model', ['Random Forest', 'Decision Tree', 'Logistic Regression', 'Bagging', 'SVM'])
     if st.button('Predict'):
-        if text in toPredictDF['NEW_PATIENT_ID'].values:
+        if user_text in toPredictDF['NEW_PATIENT_ID'].values:
             if user_text:
                 pred_df, sentiment, prediction = predict_sentiment(user_text) #, model_type)
                 
