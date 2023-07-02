@@ -29,7 +29,7 @@ def predict_sentiment(text): #, model_type):
     # else:
     toPredictDF = pd.read_csv('./final3.csv')
     # toPredictDF = data.drop(columns=['BIRTHDATE', 'DEATHDATE', 'HEALTHCARE_EXPENSES'])
-    data_to_predict = toPredictDF[toPredictDF['NEW_PATIENT_ID'] == text].drop(['PATIENT_ID', 'NEW_PATIENT_ID', 'DESCRIPTION'], 1)
+    data_to_predict = toPredictDF[toPredictDF['NEW_PATIENT_ID'] == text].drop(['PATIENT_ID', 'NEW_PATIENT_ID', 'DESCRIPTION'], axis=1)
     
     proba = model.predict_proba([data_to_predict.iloc[0]]) #data_to_predict .sample(1))[0]
     cats = ['Fetus with unknown complication',
