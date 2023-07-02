@@ -1,0 +1,8 @@
+pandas
+numpy
+streamlit
+textblob
+pillow
+joblib
+streamlit_option_menu
+xgboost==1.4.2
