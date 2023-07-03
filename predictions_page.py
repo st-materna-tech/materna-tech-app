@@ -53,6 +53,7 @@ def predict_sentiment(text): #, model_type):
 def render_page():
     st.title("MATERNATECH")
     st.markdown("---")
+    
     st.subheader("Pregnancy Complications Prediction")
     st.text("Your trusted companion for a healthy pregnancy journey")
     st.text("")
