@@ -34,6 +34,6 @@ st.markdown('<h2 class="page-title">Pregnancy Journey Companion</h2>', unsafe_al
 page = sidebar.show()
 
 if page == "Pregnancy Complications Prediction":
-predictions_page.render_page()
+  predictions_page.render_page()
 elif page == "Data Analysis":
-data_page_v2.render_page()
+  data_page_v2.render_page()
