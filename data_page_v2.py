@@ -133,4 +133,4 @@ def render_page():
     # Display the images using st.image
     col1, col2 = st.columns([3,3])
     col2.plotly_chart(model_plot1, caption="Accuracy Evluation") #, use_column_width=True)
-    col1.image(model_plot2, caption="Confusion Matrif of the DT Model")
+    #col1.image(model_plot2, caption="Confusion Matrif of the DT Model")
